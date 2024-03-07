@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class TileManager : MonoBehaviour
@@ -8,6 +9,8 @@ public class TileManager : MonoBehaviour
     [SerializeField] private GameObject mainCamera;
     [Range(0f, 1f)]
     [SerializeField] private float tickInterval = 0.1f;
+    [SerializeField] private bool enableWrapping = false;
+
     private Tile[,] tiles;
     private bool[,] conwayCells, cacheCells;
     private float lastTime;
@@ -66,6 +69,53 @@ public class TileManager : MonoBehaviour
         return count;
     }
 
+    private int CountAliveNeighborsWrapping(int x, int y)
+    {
+        int count = 0;
+
+        // Lower left (x-1, y-1)
+        if (0 < x && 0 < y && cacheCells[x - 1, y - 1]) count++;
+        else if (x == 0 && y == 0 && cacheCells[WIDTH - 1, HEIGHT - 1]) count++;
+        else if (x == 0 && 0 < y && cacheCells[WIDTH - 1, y-1]) count++;
+        else if (0 < x && y == 0 && cacheCells[x-1, HEIGHT-1]) count++;
+        
+        // Middle left (x-1, y)
+        if (0 < x && cacheCells[x-1, y]) count++;
+        else if (x == 0 && cacheCells[WIDTH-1, y]) count++;
+
+        // Upper left (x-1, y+1)
+        if (0 < x && y < HEIGHT - 1 && cacheCells[x - 1, y + 1]) count++;
+        else if (x == 0 && y == HEIGHT - 1 && cacheCells[WIDTH - 1, 0]) count++;
+        else if (x == 0 && y < HEIGHT - 1 && cacheCells[WIDTH - 1, y + 1]) count++;
+        else if (0 < x && y == HEIGHT - 1 && cacheCells[x - 1, 0]) count++;
+
+        // Top middle (x, y-1)
+        if (0 < y && cacheCells[x, y-1]) count++;
+        else if (y == 0 && cacheCells[x,HEIGHT-1]) count++;
+        
+        // Lower middle (x, y+1)
+        if (y < HEIGHT-1 && cacheCells[x, y+1]) count++;
+        else if (y == HEIGHT-1 && cacheCells[x, 0]) count++;
+
+        // Lower right (x+1, y-1)
+        if (x < WIDTH-1 && 0 < y && cacheCells[x + 1, y - 1]) count++;
+        else if (x == WIDTH-1 && y == 0 && cacheCells[0, HEIGHT - 1]) count++;
+        else if (x == WIDTH-1 && 0 < y && cacheCells[0, y-1]) count++;
+        else if (x < WIDTH-1 && y == 0 && cacheCells[x+1, HEIGHT-1]) count++;
+        
+        // Middle right (x+1, y)
+        if (x < WIDTH-1 && cacheCells[x+1, y]) count++;
+        else if (x == WIDTH-1 && cacheCells[0, y]) count++;
+
+        // Upper right (x+1, y-1)
+        if (x < WIDTH-1 && y < HEIGHT - 1 && cacheCells[x + 1, y + 1]) count++;
+        else if (x == WIDTH-1 && y == HEIGHT - 1 && cacheCells[0, 0]) count++;
+        else if (x == WIDTH-1 && y < HEIGHT - 1 && cacheCells[0, y + 1]) count++;
+        else if (x < WIDTH-1 && y == HEIGHT - 1 && cacheCells[x + 1, 0]) count++;
+
+        return count;
+    }
+
     private void CacheCells()
     {
         for (int i = 0; i < WIDTH; i++)
@@ -83,7 +133,9 @@ public class TileManager : MonoBehaviour
         {
             for (int j = 0;j < HEIGHT;j++)
             {
-                int aliveNeighbors = CountAliveNeighbors(i,j);
+                int aliveNeighbors = 0;
+                if (!enableWrapping) aliveNeighbors = CountAliveNeighbors(i, j);
+                else aliveNeighbors = CountAliveNeighborsWrapping(i, j);
 
                 if (!cacheCells[i, j] && aliveNeighbors == 3) conwayCells[i, j] = true;
                 else if (aliveNeighbors < 2) conwayCells[i,j] = false;
