@@ -4,12 +4,20 @@ using UnityEngine;
 
 public class CameraMovement : MonoBehaviour
 {
-    [SerializeField] private Camera mainCamera;
+    private Camera mainCamera;
     [SerializeField] private float zoomScale = 1f;
+
+    private void Start()
+    {
+        mainCamera = GetComponent<Camera>();
+    }
 
     void Update()
     {
         Vector2 scrollVector = Input.mouseScrollDelta;
         mainCamera.orthographicSize -= scrollVector.y * zoomScale;
+
+        Vector3 moveVector = new Vector3(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"), 0);
+        transform.position += moveVector;
     }
 }
