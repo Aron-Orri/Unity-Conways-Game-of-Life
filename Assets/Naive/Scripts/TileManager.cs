@@ -74,44 +74,52 @@ public class TileManager : MonoBehaviour
         int count = 0;
 
         // Lower left (x-1, y-1)
-        if (0 < x && 0 < y) count += cacheCells[x - 1, y - 1] ? 1 : 0;
-        else if (x == 0 && y == 0) count += cacheCells[WIDTH - 1, HEIGHT - 1] ? 1 : 0;
-        else if (x == 0 && 0 < y) count += cacheCells[WIDTH - 1, y-1] ? 1 : 0;
-        else if (0 < x && y == 0) count += cacheCells[x-1, HEIGHT-1] ? 1 : 0;
+        if (0 < x && 0 < y) count += cacheCells[x - 1, y - 1] ? 1 : 0; // Default
+        else if (x == 0 && 0 < y) count += cacheCells[WIDTH - 1, y - 1] ? 1 : 0; // Wrap x
+        else if (0 < x && y == 0) count += cacheCells[x - 1, HEIGHT - 1] ? 1 : 0; // Wrap y
+        else if (x == 0 && y == 0) count += cacheCells[WIDTH - 1, HEIGHT - 1] ? 1 : 0; // Wrap both
+        else Debug.LogError("Unexpected coordinates");
         
         // Middle left (x-1, y)
-        if (0 < x) count += cacheCells[x-1, y] ? 1 : 0;
-        else if (x == 0) count += cacheCells[WIDTH-1, y] ? 1 : 0;
+        if (0 < x) count += cacheCells[x-1, y] ? 1 : 0; // Default
+        else if (x == 0) count += cacheCells[WIDTH-1, y] ? 1 : 0; // Wrap x
+        else Debug.LogError("Unexpected coordinates");
 
         // Upper left (x-1, y+1)
-        if (0 < x && y < HEIGHT - 1) count += cacheCells[x - 1, y + 1] ? 1 : 0;
-        else if (x == 0 && y == HEIGHT - 1) count += cacheCells[WIDTH - 1, 0] ? 1 : 0;
-        else if (x == 0 && y < HEIGHT - 1) count += cacheCells[WIDTH - 1, y + 1] ? 1 : 0;
-        else if (0 < x && y == HEIGHT - 1) count += cacheCells[x - 1, 0] ? 1 : 0;
+        if (0 < x && y < HEIGHT - 1) count += cacheCells[x - 1, y + 1] ? 1 : 0; // Default
+        else if (x == 0 && y < HEIGHT - 1) count += cacheCells[WIDTH - 1, y + 1] ? 1 : 0; // Wrap x
+        else if (0 < x && y == HEIGHT - 1) count += cacheCells[x - 1, 0] ? 1 : 0; // Wrap y
+        else if (x == 0 && y == HEIGHT - 1) count += cacheCells[WIDTH - 1, 0] ? 1 : 0; // Wrap both
+        else Debug.LogError("Unexpected coordinates");
 
         // Top middle (x, y-1)
-        if (0 < y) count += cacheCells[x, y-1] ? 1 : 0;
-        else if (y == 0) count += cacheCells[x,HEIGHT-1] ? 1 : 0;
+        if (0 < y) count += cacheCells[x, y-1] ? 1 : 0; // Default
+        else if (y == 0) count += cacheCells[x,HEIGHT-1] ? 1 : 0; // Wrap y
+        else Debug.LogError("Unexpected coordinates");
         
         // Lower middle (x, y+1)
-        if (y < HEIGHT-1) count += cacheCells[x, y+1] ? 1 : 0;
-        else if (y == HEIGHT-1) count += cacheCells[x, 0] ? 1 : 0;
+        if (y < HEIGHT-1) count += cacheCells[x, y+1] ? 1 : 0; // Default
+        else if (y == HEIGHT-1) count += cacheCells[x, 0] ? 1 : 0; // Wrap y
+        else Debug.LogError("Unexpected coordinates");
 
         // Lower right (x+1, y-1)
-        if (x < WIDTH-1 && 0 < y) count += cacheCells[x + 1, y - 1] ? 1 : 0;
-        else if (x == WIDTH-1 && y == 0) count += cacheCells[0, HEIGHT - 1] ? 1 : 0;
-        else if (x == WIDTH-1 && 0 < y) count += cacheCells[0, y-1] ? 1 : 0;
-        else if (x < WIDTH-1 && y == 0) count += cacheCells[x+1, HEIGHT-1] ? 1 : 0;
+        if (x < WIDTH-1 && 0 < y) count += cacheCells[x + 1, y - 1] ? 1 : 0; // Default
+        else if (x == WIDTH-1 && 0 < y) count += cacheCells[0, y-1] ? 1 : 0; // Wrap x
+        else if (x < WIDTH-1 && y == 0) count += cacheCells[x+1, HEIGHT-1] ? 1 : 0; // Wrap y
+        else if (x == WIDTH-1 && y == 0) count += cacheCells[0, HEIGHT - 1] ? 1 : 0; // Wrap both
+        else Debug.LogError("Unexpected coordinates");
         
         // Middle right (x+1, y)
-        if (x < WIDTH-1) count += cacheCells[x+1, y] ? 1 : 0;
-        else if (x == WIDTH-1) count += cacheCells[0, y] ? 1 : 0;
+        if (x < WIDTH-1) count += cacheCells[x+1, y] ? 1 : 0; // Default
+        else if (x == WIDTH-1) count += cacheCells[0, y] ? 1 : 0; // Wrap x
+        else Debug.LogError("Unexpected coordinates");
 
         // Upper right (x+1, y-1)
-        if (x < WIDTH-1 && y < HEIGHT - 1) count += cacheCells[x + 1, y + 1] ? 1 : 0;
-        else if (x == WIDTH-1 && y == HEIGHT - 1) count += cacheCells[0, 0] ? 1 : 0;
-        else if (x == WIDTH-1 && y < HEIGHT - 1) count += cacheCells[0, y + 1] ? 1 : 0;
-        else if (x < WIDTH-1 && y == HEIGHT - 1) count += cacheCells[x + 1, 0] ? 1 : 0;
+        if (x < WIDTH-1 && y < HEIGHT - 1) count += cacheCells[x + 1, y + 1] ? 1 : 0; // Default
+        else if (x == WIDTH-1 && y < HEIGHT - 1) count += cacheCells[0, y + 1] ? 1 : 0; // Wrap x
+        else if (x < WIDTH-1 && y == HEIGHT - 1) count += cacheCells[x + 1, 0] ? 1 : 0; // Wrap y
+        else if (x == WIDTH-1 && y == HEIGHT - 1) count += cacheCells[0, 0] ? 1 : 0; // Wrap both
+        else Debug.LogError("Unexpected coordinates");
 
         return count;
     }
