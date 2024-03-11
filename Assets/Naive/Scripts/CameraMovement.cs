@@ -16,6 +16,7 @@ public class CameraMovement : MonoBehaviour
     {
         Vector2 scrollVector = Input.mouseScrollDelta;
         mainCamera.orthographicSize -= scrollVector.y * zoomScale;
+        if (mainCamera.orthographicSize < 10) mainCamera.orthographicSize = 10;
 
         Vector3 moveVector = new Vector3(Input.GetAxis("Horizontal") * moveScale, Input.GetAxis("Vertical") * moveScale, 0);
         transform.position += moveVector;
