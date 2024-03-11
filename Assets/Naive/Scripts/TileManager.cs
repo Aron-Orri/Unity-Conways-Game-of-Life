@@ -74,44 +74,44 @@ public class TileManager : MonoBehaviour
         int count = 0;
 
         // Lower left (x-1, y-1)
-        if (0 < x && 0 < y && cacheCells[x - 1, y - 1]) count++;
-        else if (x == 0 && y == 0 && cacheCells[WIDTH - 1, HEIGHT - 1]) count++;
-        else if (x == 0 && 0 < y && cacheCells[WIDTH - 1, y-1]) count++;
-        else if (0 < x && y == 0 && cacheCells[x-1, HEIGHT-1]) count++;
+        if (0 < x && 0 < y) count += cacheCells[x - 1, y - 1] ? 1 : 0;
+        else if (x == 0 && y == 0) count += cacheCells[WIDTH - 1, HEIGHT - 1] ? 1 : 0;
+        else if (x == 0 && 0 < y) count += cacheCells[WIDTH - 1, y-1] ? 1 : 0;
+        else if (0 < x && y == 0) count += cacheCells[x-1, HEIGHT-1] ? 1 : 0;
         
         // Middle left (x-1, y)
-        if (0 < x && cacheCells[x-1, y]) count++;
-        else if (x == 0 && cacheCells[WIDTH-1, y]) count++;
+        if (0 < x) count += cacheCells[x-1, y] ? 1 : 0;
+        else if (x == 0) count += cacheCells[WIDTH-1, y] ? 1 : 0;
 
         // Upper left (x-1, y+1)
-        if (0 < x && y < HEIGHT - 1 && cacheCells[x - 1, y + 1]) count++;
-        else if (x == 0 && y == HEIGHT - 1 && cacheCells[WIDTH - 1, 0]) count++;
-        else if (x == 0 && y < HEIGHT - 1 && cacheCells[WIDTH - 1, y + 1]) count++;
-        else if (0 < x && y == HEIGHT - 1 && cacheCells[x - 1, 0]) count++;
+        if (0 < x && y < HEIGHT - 1) count += cacheCells[x - 1, y + 1] ? 1 : 0;
+        else if (x == 0 && y == HEIGHT - 1) count += cacheCells[WIDTH - 1, 0] ? 1 : 0;
+        else if (x == 0 && y < HEIGHT - 1) count += cacheCells[WIDTH - 1, y + 1] ? 1 : 0;
+        else if (0 < x && y == HEIGHT - 1) count += cacheCells[x - 1, 0] ? 1 : 0;
 
         // Top middle (x, y-1)
-        if (0 < y && cacheCells[x, y-1]) count++;
-        else if (y == 0 && cacheCells[x,HEIGHT-1]) count++;
+        if (0 < y) count += cacheCells[x, y-1] ? 1 : 0;
+        else if (y == 0) count += cacheCells[x,HEIGHT-1] ? 1 : 0;
         
         // Lower middle (x, y+1)
-        if (y < HEIGHT-1 && cacheCells[x, y+1]) count++;
-        else if (y == HEIGHT-1 && cacheCells[x, 0]) count++;
+        if (y < HEIGHT-1) count += cacheCells[x, y+1] ? 1 : 0;
+        else if (y == HEIGHT-1) count += cacheCells[x, 0] ? 1 : 0;
 
         // Lower right (x+1, y-1)
-        if (x < WIDTH-1 && 0 < y && cacheCells[x + 1, y - 1]) count++;
-        else if (x == WIDTH-1 && y == 0 && cacheCells[0, HEIGHT - 1]) count++;
-        else if (x == WIDTH-1 && 0 < y && cacheCells[0, y-1]) count++;
-        else if (x < WIDTH-1 && y == 0 && cacheCells[x+1, HEIGHT-1]) count++;
+        if (x < WIDTH-1 && 0 < y) count += cacheCells[x + 1, y - 1] ? 1 : 0;
+        else if (x == WIDTH-1 && y == 0) count += cacheCells[0, HEIGHT - 1] ? 1 : 0;
+        else if (x == WIDTH-1 && 0 < y) count += cacheCells[0, y-1] ? 1 : 0;
+        else if (x < WIDTH-1 && y == 0) count += cacheCells[x+1, HEIGHT-1] ? 1 : 0;
         
         // Middle right (x+1, y)
-        if (x < WIDTH-1 && cacheCells[x+1, y]) count++;
-        else if (x == WIDTH-1 && cacheCells[0, y]) count++;
+        if (x < WIDTH-1) count += cacheCells[x+1, y] ? 1 : 0;
+        else if (x == WIDTH-1) count += cacheCells[0, y] ? 1 : 0;
 
         // Upper right (x+1, y-1)
-        if (x < WIDTH-1 && y < HEIGHT - 1 && cacheCells[x + 1, y + 1]) count++;
-        else if (x == WIDTH-1 && y == HEIGHT - 1 && cacheCells[0, 0]) count++;
-        else if (x == WIDTH-1 && y < HEIGHT - 1 && cacheCells[0, y + 1]) count++;
-        else if (x < WIDTH-1 && y == HEIGHT - 1 && cacheCells[x + 1, 0]) count++;
+        if (x < WIDTH-1 && y < HEIGHT - 1) count += cacheCells[x + 1, y + 1] ? 1 : 0;
+        else if (x == WIDTH-1 && y == HEIGHT - 1) count += cacheCells[0, 0] ? 1 : 0;
+        else if (x == WIDTH-1 && y < HEIGHT - 1) count += cacheCells[0, y + 1] ? 1 : 0;
+        else if (x < WIDTH-1 && y == HEIGHT - 1) count += cacheCells[x + 1, 0] ? 1 : 0;
 
         return count;
     }
