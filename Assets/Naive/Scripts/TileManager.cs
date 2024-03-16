@@ -1,4 +1,3 @@
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class TileManager : MonoBehaviour
@@ -14,6 +13,7 @@ public class TileManager : MonoBehaviour
     private Tile[,] tiles;
     private bool[,] conwayCells, cacheCells;
     private float lastTime;
+    private bool isPaused;
 
 
 
@@ -33,7 +33,8 @@ public class TileManager : MonoBehaviour
         {
             for (int j = 0; j < HEIGHT; j++)
             {
-                tiles[i, j] = Instantiate(tilePrefab, new Vector3(i,j,0), Quaternion.identity).GetComponent<Tile>();
+                // Spawn tiles shifted by .5 so that the lower left corner of the first tile is in (0,0)
+                tiles[i, j] = Instantiate(tilePrefab, new Vector3(i+.5f,j+.5f,0), Quaternion.identity).GetComponent<Tile>();
                 conwayCells[i, j] = 0 == Random.Range(0, 2);
             }
         }
@@ -164,8 +165,21 @@ public class TileManager : MonoBehaviour
         }
     }
 
+    private void HandleLeftMouseClick()
+    {
+        Vector3 pos = mainCamera.GetComponent<Camera>().ScreenToWorldPoint(Input.mousePosition);
+        conwayCells[(int)pos.x, (int)pos.y] = !conwayCells[(int)pos.x, (int)pos.y];
+        UpdateTiles();
+    }
+
     private void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Space)) isPaused = !isPaused;
+        if (Input.GetMouseButtonDown(0)) HandleLeftMouseClick();
+        if (isPaused)
+        {
+            return;
+        }
         if (Time.time - lastTime < tickInterval) return;
         lastTime = Time.time;
         CacheCells();
