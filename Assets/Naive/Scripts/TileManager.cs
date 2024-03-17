@@ -2,13 +2,14 @@ using UnityEngine;
 
 public class TileManager : MonoBehaviour
 {
-    [SerializeField] private uint WIDTH=500;
-    [SerializeField] private uint HEIGHT=500;
+    [SerializeField] private int WIDTH=500;
+    [SerializeField] private int HEIGHT=500;
     [SerializeField] private GameObject tilePrefab;
     [SerializeField] private GameObject mainCamera;
     [Range(0f, 1f)]
     [SerializeField] private float tickInterval = 0.1f;
     [SerializeField] private bool enableWrapping = false;
+    [SerializeField] private bool useModulus = false;
 
     private Tile[,] tiles;
     private bool[,] conwayCells, cacheCells;
@@ -125,6 +126,27 @@ public class TileManager : MonoBehaviour
         return count;
     }
 
+    private int CountAliveNeighborsWrappingModulus(int x, int y)
+    {
+        int count = 0;
+
+        int xLeft = ((x - 1) + WIDTH) % WIDTH;
+        int xRight = (x + 1) % WIDTH;
+        int yLeft = ((y - 1) + HEIGHT) % HEIGHT;
+        int yRight = (y + 1) % HEIGHT;
+
+        count += cacheCells[xLeft, yLeft] ? 1 : 0; // Default
+        count += cacheCells[xLeft, y] ? 1 : 0; // Default
+        count += cacheCells[xLeft, yRight] ? 1 : 0; // Default
+        count += cacheCells[x, yLeft] ? 1 : 0; // Default
+        count += cacheCells[x, yRight] ? 1 : 0; // Default
+        count += cacheCells[xRight, yLeft] ? 1 : 0; // Default
+        count += cacheCells[xRight, y] ? 1 : 0; // Default
+        count += cacheCells[xRight, yRight] ? 1 : 0; // Default
+
+        return count;
+    }
+
     private void CacheCells()
     {
         for (int i = 0; i < WIDTH; i++)
@@ -144,6 +166,7 @@ public class TileManager : MonoBehaviour
             {
                 int aliveNeighbors = 0;
                 if (!enableWrapping) aliveNeighbors = CountAliveNeighbors(i, j);
+                else if (useModulus) aliveNeighbors = CountAliveNeighborsWrappingModulus(i, j);
                 else aliveNeighbors = CountAliveNeighborsWrapping(i, j);
 
                 if (!cacheCells[i, j] && aliveNeighbors == 3) conwayCells[i, j] = true;
